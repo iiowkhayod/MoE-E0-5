@@ -21,6 +21,8 @@ This is a single-seed exploratory campaign on the complete eligible population o
 
 All learned conditions use seed 43, GHI-scale MSE, the same batch order policy, and validation MSE for checkpoint selection. Ramp labels never select checkpoints. Ramp is an absolute future GHI change of at least 100 W/m², following the cited DBMF evaluation and the pre-existing Folsom protocol. The outcome is exploratory: report E2−E1 paired metric differences without significance claims.
 
+For per-horizon Ramp metrics, an issue is Ramp at lead `h` when `|GHI(t+h)−GHI(t)| >= 100 W/m²`; otherwise it is non-Ramp. For the event summary, an observed or predicted event exists when any of the four declared leads crosses that threshold. Precision, recall and F1 match observed and predicted events at the same issue time. Detection lag is the predicted first-crossing lead minus the observed first-crossing lead among `[5, 10, 15, 30]` minutes, and is reported only when the predicted and observed first crossings have the same sign. Consecutive issue times are not merged into larger episodes, so these are issue-level event diagnostics rather than unique meteorological-event counts.
+
 Weather variables are imputed and standardized from 2014 only. Standardized weather values are clipped to [−10, 10] to prevent a train-constant channel from becoming unbounded in later years. Reconstructed forecasts are clipped to the observed-data validity range [0, 1600] W/m². Both rules are fixed before the scientific run and applied identically to all learned conditions.
 
 ## Model-family follow-up
