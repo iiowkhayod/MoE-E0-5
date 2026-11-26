@@ -26,6 +26,7 @@ def main():
     parser.add_argument("--source-commit", required=True)
     parser.add_argument("--protocol", required=True, type=Path)
     parser.add_argument("--config", required=True, type=Path)
+    parser.add_argument("--conditions", required=True, type=Path)
     args = parser.parse_args()
     metrics = pd.read_csv(args.run_root / "evaluation/metrics.csv")
     events = pd.read_csv(args.run_root / "evaluation/events.csv")
@@ -88,6 +89,7 @@ def main():
                        "condition_id": model, "seed": seed, "status": "complete",
                        "source_commit": args.source_commit, "protocol_sha256": sha256(args.protocol),
                        "config_sha256": sha256(args.config), "started_utc": start,
+                       "conditions_sha256": sha256(args.conditions),
                        "finished_utc": finish, "runtime_seconds": runtime,
                        "parameter_count": parameter_count, "best_epoch": best_epoch,
                        "scopes": scope, "environment_path": str(folder / "environment.json"),

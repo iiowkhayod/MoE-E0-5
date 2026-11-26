@@ -40,7 +40,7 @@ python "$project/report.py" --run-root "$run_root"
 date -u +%FT%TZ > "$run_root/finished_utc.txt"
 python "$project/finalize.py" --run-root "$run_root" --prepared "$prepared" \
   --source-commit "$source_commit" --protocol "$project/experiments/e2_baseline/protocol.md" \
-  --config "$config"
+  --config "$config" --conditions "$conditions"
 python - <<'PY' "$run_root"
 import hashlib, json, pathlib, sys
 root=pathlib.Path(sys.argv[1])
