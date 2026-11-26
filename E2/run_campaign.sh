@@ -7,8 +7,13 @@ config="$project/configs/base.json"
 conditions="$project/configs/conditions.json"
 prepared=/root/data1/expert_E1-5/E2_addRes/prepared/cross_year_v1
 run_root=/root/data1/expert_E1-5/E2_addRes/runs/e2_baseline_seed43_attempt01
+test "${#source_commit}" -eq 40
+test -f "$prepared/complete.json"
+for year in 2014 2015 2016; do
+  test -f "/root/data1/expert_E1-5/E2_addRes/cache/rgb64_v2/$year/complete.json"
+done
+test ! -e "$run_root"
 mkdir -p "$run_root/conditions"
-test ! -e "$run_root/complete.json"
 
 date -u +%FT%TZ > "$run_root/started_utc.txt"
 uname -a > "$run_root/hardware.txt"
