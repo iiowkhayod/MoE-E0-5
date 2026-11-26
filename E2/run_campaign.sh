@@ -17,6 +17,8 @@ free -b >> "$run_root/hardware.txt"
 nvidia-smi -q >> "$run_root/hardware.txt"
 python -VV > "$run_root/environment.txt"
 python -m pip freeze >> "$run_root/environment.txt"
+python "$project/audit_data.py" --config "$config" --prepared "$prepared" \
+  --output "$run_root/data_audit"
 
 for condition in e1_direct_a4 e2_a1 e2_a2 e2_a3 e2_a4 e2_a1_gru e2_a3_3dcnn e2_a4_gate; do
   output="$run_root/conditions/$condition"

@@ -6,6 +6,7 @@ E2 evaluates whether separating deterministic solar geometry from weather-relate
 
 - `prepare_cache.py` streams each official sky-image archive into a verified 64×64 RGB memory map while preserving archive mtime.
 - `prepare_data.py` creates the complete common population for every condition.
+- `audit_data.py` records observation missingness, image-clock cadence and causal matching ages.
 - `train.py` trains one immutable E1, E2, input-ablation or model-family condition.
 - `evaluate.py` computes overall, Ramp, non-Ramp, direction and event metrics against Smart Persistence.
 - `plot_results.py` produces paired test trajectories for representative stable and Ramp-rich days.
