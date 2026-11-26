@@ -45,15 +45,21 @@ def main():
     data = pd.read_csv(args.forecasts, parse_dates=["issue_utc"])
     test = data[(data.split == "test") & (data.model == "e2_a4")].copy()
     delta = (test[f"ghi_{args.lead}"] - test.current_ghi).abs()
-    counts = delta.ge(args.threshold).groupby(test.issue_utc.dt.normalize()).sum()
-    ramp_day, stable_day = counts.idxmax(), counts.idxmin()
+    days = test.issue_utc.dt.normalize()
+    daily = pd.DataFrame({"ramp": delta.ge(args.threshold), "day": days}).groupby("day").agg(
+        ramp_samples=("ramp", "sum"), samples=("ramp", "size"))
+    minimum_samples = max(1, int(np.floor(0.8 * daily.samples.median())))
+    representative = daily[daily.samples >= minimum_samples].copy()
+    representative["ramp_fraction"] = representative.ramp_samples / representative.samples
+    ramp_day = representative.ramp_fraction.idxmax()
+    stable_day = representative.ramp_fraction.idxmin()
     plot_day(data[data.split == "test"], ramp_day, args.lead, args.output / "ramp_day.png",
              f"Ramp-rich test day, +{args.lead} min")
     plot_day(data[data.split == "test"], stable_day, args.lead, args.output / "stable_day.png",
              f"Stable test day, +{args.lead} min")
-    pd.DataFrame({"selection": ["ramp-rich", "stable"], "utc_day": [ramp_day, stable_day],
-                  "ramp_samples": [int(counts.loc[ramp_day]), int(counts.loc[stable_day])]}
-                 ).to_csv(args.output / "selected_days.csv", index=False)
+    chosen = representative.loc[[ramp_day, stable_day]].reset_index()
+    chosen.insert(0, "selection", ["ramp-rich", "stable"])
+    chosen.to_csv(args.output / "selected_days.csv", index=False)
 
 
 if __name__ == "__main__":
