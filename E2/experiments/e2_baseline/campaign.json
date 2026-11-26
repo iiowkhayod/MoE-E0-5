@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.2",
+  "campaign_id": "folsom-e2-cross-year-v1",
+  "experiment_id": "e2_baseline",
+  "stage": "pilot",
+  "protocol_path": "protocol.md",
+  "research_question": "Does fixed Ineichen clear-sky plus learned additive residual improve paired Folsom GHI forecasts, especially ramps?",
+  "decision_rule": "Report all paired E1/E2 outcomes. Do not use test results to select a condition.",
+  "decision_thresholds": [
+    {"id": "ramp_event", "value": 100, "operator": "absolute_change_gte", "unit": "W/m2", "basis_type": "peer_reviewed_source_and_prior_protocol", "reference": "Zhang et al., Solar Energy 316 (2026) 114864 and the frozen local Folsom protocol", "locator": "paper Table 6 and Cloud-Ramp-Aware_2014/protocol.md", "applicability": "Ramp grouping and event detection only", "derivation": "Directly reuse the published and prior-project operational threshold; it is not a success gate."}
+  ],
+  "benchmark": {
+    "name": "Folsom solar forecasting dataset",
+    "version": "Zenodo record 2826939, three-year release",
+    "canonical_url": "https://zenodo.org/records/2826939",
+    "official_code_url": "https://zenodo.org/records/2826939",
+    "official_code_revision": "zenodo-record-2826939",
+    "suite_id": "custom-cross-year-point-forecast-v1",
+    "scope_policy": "complete_protocol_eligible_population",
+    "expected_unit_name": "issue_timestamp",
+    "required_scopes": ["train", "validation", "test"],
+    "loader_entrypoint": "E2/prepare_data.py",
+    "evaluator_entrypoint": "E2/evaluate.py",
+    "metric_entrypoint": "E2/evaluate.py"
+  },
+  "data_policy": {"source": "official_dataset_release", "full_official_scope": true, "subset": false, "generated_scientific_data": false, "custom_task_data": false, "official_loader": false, "official_evaluator": false},
+  "seed_policy": {"seeds": [43], "replicate_ids": [], "rationale": "One predeclared seed for the exploratory input and target-parameterization comparison.", "additional_runs_basis": null},
+  "resource_plan": {"accelerator": "single Tesla P100-SXM2-16GB", "memory_gb": 15, "storage_gb": 20, "expected_runtime_hours": 8, "estimate_basis": "Existing two-frame CNN+TCN runs on the same P100 plus six-frame input and three full years; cache preprocessing is included."}
+}
+

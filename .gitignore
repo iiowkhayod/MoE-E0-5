@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+E2/runs/
+E2/cache/
+E2/prepared/
+E2/experiments/*/results/
+E2/experiments/*/checkpoints/
+

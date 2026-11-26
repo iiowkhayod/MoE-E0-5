@@ -1,0 +1,11 @@
+{
+  "e1_direct_a4": {"target": "direct", "weather": true, "images": true, "temporal": "tcn", "visual": "cnn_gru", "fusion": "concat"},
+  "e2_a1": {"target": "residual", "weather": false, "images": false, "temporal": "tcn", "visual": "cnn_gru", "fusion": "concat"},
+  "e2_a2": {"target": "residual", "weather": true, "images": false, "temporal": "tcn", "visual": "cnn_gru", "fusion": "concat"},
+  "e2_a3": {"target": "residual", "weather": false, "images": true, "temporal": "tcn", "visual": "cnn_gru", "fusion": "concat"},
+  "e2_a4": {"target": "residual", "weather": true, "images": true, "temporal": "tcn", "visual": "cnn_gru", "fusion": "concat"},
+  "e2_a1_gru": {"target": "residual", "weather": false, "images": false, "temporal": "gru", "visual": "cnn_gru", "fusion": "concat"},
+  "e2_a3_3dcnn": {"target": "residual", "weather": false, "images": true, "temporal": "tcn", "visual": "3dcnn", "fusion": "concat"},
+  "e2_a4_gate": {"target": "residual", "weather": true, "images": true, "temporal": "tcn", "visual": "cnn_gru", "fusion": "gate"}
+}
+
