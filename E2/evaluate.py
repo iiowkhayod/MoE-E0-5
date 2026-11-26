@@ -64,6 +64,7 @@ def main():
         model_frames = {"smart_persistence": scope[["issue_utc"]].copy()}
         for column, lead in enumerate(leads):
             model_frames["smart_persistence"][f"ghi_{lead}"] = scope[f"ghi_{lead}"]
+            model_frames["smart_persistence"][f"clear_{lead}"] = scope[f"clear_{lead}"]
             model_frames["smart_persistence"][f"prediction_{lead}"] = smart[:, column]
         for folder in sorted(path for path in args.runs.iterdir() if path.is_dir()):
             path = folder / f"{role}_predictions.csv"
@@ -74,6 +75,8 @@ def main():
             if not frame.issue_utc.equals(scope.issue_utc):
                 raise ValueError(f"scope mismatch: {role}/{model}")
             frame["current_ghi"] = current
+            for lead in leads:
+                frame[f"clear_{lead}"] = scope[f"clear_{lead}"].to_numpy()
             frame["model"] = model
             frame["split"] = role
             forecasts.append(frame)

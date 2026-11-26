@@ -15,7 +15,11 @@ def plot_day(data, day, lead, output, title):
     fig, axis = plt.subplots(figsize=(11, 4.5))
     axis.plot(frame.index, frame[f"ghi_{lead}"], label="Observed GHI", color="black", linewidth=1.5)
     axis.plot(frame.index, frame[f"prediction_{lead}"], label="E2 residual", linewidth=1.2)
+    axis.plot(frame.index, frame[f"clear_{lead}"], label="Clear-sky GHI", linewidth=1,
+              color="tab:orange", alpha=.8)
     for name, label in (("e1_direct_a4", "E1 direct"), ("smart_persistence", "Smart persistence")):
+        if name not in models:
+            continue
         other = models[name].loc[frame.index]
         axis.plot(frame.index, other[f"prediction_{lead}"], label=label, linewidth=1, alpha=.85)
     axis.set(title=title, ylabel="GHI (W/m²)", xlabel="Issue time (UTC)")

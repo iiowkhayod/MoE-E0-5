@@ -21,6 +21,8 @@ This is a single-seed exploratory campaign on the complete eligible population o
 
 All learned conditions use seed 43, GHI-scale MSE, the same batch order policy, and validation MSE for checkpoint selection. Ramp labels never select checkpoints. Ramp is an absolute future GHI change of at least 100 W/m², following the cited DBMF evaluation and the pre-existing Folsom protocol. The outcome is exploratory: report E2−E1 paired metric differences without significance claims.
 
+Weather variables are imputed and standardized from 2014 only. Standardized weather values are clipped to [−10, 10] to prevent a train-constant channel from becoming unbounded in later years. Reconstructed forecasts are clipped to the observed-data validity range [0, 1600] W/m². Both rules are fixed before the scientific run and applied identically to all learned conditions.
+
 ## Model-family follow-up
 
 After the input ablation, run only three structure alternatives: GRU instead of TCN for A1, a small 3D CNN instead of CNN-GRU for A3, and a single learned fusion gate instead of concatenation for A4. The follow-up retains the full prepared scope.

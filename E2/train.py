@@ -57,6 +57,7 @@ class ForecastDataset(Dataset):
         missing = ~np.isfinite(weather)
         weather = np.where(missing, self.norm["weather_median"], weather)
         weather = (weather - self.norm["weather_mean"]) / self.norm["weather_std"]
+        weather = np.clip(weather, -10, 10)
         if not self.condition["weather"]:
             weather = np.zeros_like(weather)
             missing = np.zeros_like(missing)
@@ -84,7 +85,8 @@ def predict(model, loader, device, condition, loss_scale, clear_targets):
                            condition["images"])
             values.append(output.cpu().numpy() * loss_scale)
     values = np.concatenate(values)
-    return values if condition["target"] == "direct" else values + clear_targets
+    restored = values if condition["target"] == "direct" else values + clear_targets
+    return np.clip(restored, 0, 1600)
 
 
 def main():
