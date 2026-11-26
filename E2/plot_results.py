@@ -18,7 +18,7 @@ def plot_day(data, day, lead, output, title):
     axis.plot(frame.index, frame[f"clear_{lead}"], label="Clear-sky GHI", linewidth=1,
               color="tab:orange", alpha=.8)
     for name, label in (("e1_direct_a4", "E1 direct"), ("smart_persistence", "Smart persistence")):
-        if name not in models:
+        if name not in models or models[name].empty:
             continue
         other = models[name].loc[frame.index]
         axis.plot(frame.index, other[f"prediction_{lead}"], label=label, linewidth=1, alpha=.85)
