@@ -29,6 +29,7 @@ python -u "$project/evaluate.py" --config "$config" --prepared "$prepared" \
   --runs "$run_root/conditions" --output "$run_root/evaluation" 2>&1 | tee "$run_root/evaluate.log"
 python "$project/plot_results.py" --forecasts "$run_root/evaluation/forecasts.csv" \
   --output "$run_root/plots" --lead 15 --threshold 100
+python "$project/report.py" --run-root "$run_root"
 date -u +%FT%TZ > "$run_root/finished_utc.txt"
 python "$project/finalize.py" --run-root "$run_root" --prepared "$prepared" \
   --source-commit "$source_commit" --protocol "$project/experiments/e2_baseline/protocol.md" \
