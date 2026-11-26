@@ -27,4 +27,8 @@ bash E2/run_campaign.sh
 python E2/report.py --run-root /root/data1/expert_E1-5/E2_addRes/runs/e2_baseline_seed43_attempt01
 ```
 
+`supervise_full.sh` is the guarded server entrypoint used when the three image caches are
+still running. It verifies that every cache worker remains live, prepares the full cross-year
+population only after all completion markers exist, and then launches the immutable campaign.
+
 Engineering fixtures live under `engineering/` on the server and are excluded from scientific results.
