@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import platform
 import time
+from datetime import datetime, timezone
 
 import numpy as np
 import pandas as pd
@@ -96,11 +97,13 @@ def main():
     parser.add_argument("--condition", required=True)
     parser.add_argument("--prepared", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--source-commit", required=True)
     args = parser.parse_args()
     config = load_config(args.config)
     condition = json.loads(args.conditions.read_text())[args.condition]
     args.output.mkdir(parents=True, exist_ok=False)
     started = time.time()
+    started_utc = datetime.now(timezone.utc).isoformat()
     seed = int(config["seed"])
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
@@ -170,7 +173,9 @@ def main():
     metadata = {"condition_id": args.condition, "condition": condition, "seed": seed,
                 "best_epoch": best_epoch, "best_validation_mse_scaled": best,
                 "parameter_count": sum(p.numel() for p in model.parameters()),
-                "runtime_seconds": time.time() - started, "hostname": platform.node(),
+                "runtime_seconds": time.time() - started, "started_utc": started_utc,
+                "finished_utc": datetime.now(timezone.utc).isoformat(),
+                "source_commit": args.source_commit, "hostname": platform.node(),
                 "torch": torch.__version__, "cuda": torch.version.cuda,
                 "gpu": torch.cuda.get_device_name(0)}
     (args.output / "run.json").write_text(json.dumps(metadata, indent=2))

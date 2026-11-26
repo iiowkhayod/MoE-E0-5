@@ -2,6 +2,7 @@
 set -euo pipefail
 
 project=$(cd "$(dirname "$0")" && pwd)
+source_commit=${SOURCE_COMMIT:?Set SOURCE_COMMIT to the immutable 40-character Git commit}
 config="$project/configs/base.json"
 conditions="$project/configs/conditions.json"
 prepared=/root/data1/expert_E1-5/E2_addRes/prepared/cross_year_v1
@@ -21,7 +22,7 @@ for condition in e1_direct_a4 e2_a1 e2_a2 e2_a3 e2_a4 e2_a1_gru e2_a3_3dcnn e2_a
   output="$run_root/conditions/$condition"
   test ! -e "$output"
   python -u "$project/train.py" --config "$config" --conditions "$conditions" \
-    --condition "$condition" --prepared "$prepared" --output "$output" \
+    --condition "$condition" --prepared "$prepared" --output "$output" --source-commit "$source_commit" \
     2>&1 | tee "$run_root/$condition.log"
 done
 python -u "$project/evaluate.py" --config "$config" --prepared "$prepared" \
@@ -29,6 +30,9 @@ python -u "$project/evaluate.py" --config "$config" --prepared "$prepared" \
 python "$project/plot_results.py" --forecasts "$run_root/evaluation/forecasts.csv" \
   --output "$run_root/plots" --lead 15 --threshold 100
 date -u +%FT%TZ > "$run_root/finished_utc.txt"
+python "$project/finalize.py" --run-root "$run_root" --prepared "$prepared" \
+  --source-commit "$source_commit" --protocol "$project/experiments/e2_baseline/protocol.md" \
+  --config "$config"
 python - <<'PY' "$run_root"
 import hashlib, json, pathlib, sys
 root=pathlib.Path(sys.argv[1])

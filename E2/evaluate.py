@@ -67,6 +67,8 @@ def main():
             model_frames["smart_persistence"][f"clear_{lead}"] = scope[f"clear_{lead}"]
             model_frames["smart_persistence"][f"prediction_{lead}"] = smart[:, column]
         for folder in sorted(path for path in args.runs.iterdir() if path.is_dir()):
+            if folder.name == "smart_persistence":
+                continue
             path = folder / f"{role}_predictions.csv"
             if path.exists():
                 model_frames[folder.name] = pd.read_csv(path, parse_dates=["issue_utc"])
@@ -106,6 +108,13 @@ def main():
     pd.DataFrame(event_rows).to_csv(args.output / "events.csv", index=False)
     forecast = pd.concat(forecasts, ignore_index=True)
     forecast.to_csv(args.output / "forecasts.csv", index=False)
+    smart_folder = args.runs / "smart_persistence"
+    smart_folder.mkdir(exist_ok=False)
+    for role in ("validation", "test"):
+        smart = forecast[(forecast.model == "smart_persistence") & (forecast.split == role)]
+        columns = ["issue_utc"] + [item for lead in leads for item in
+                                    (f"ghi_{lead}", f"prediction_{lead}")]
+        smart[columns].to_csv(smart_folder / f"{role}_predictions.csv", index=False)
     paired = []
     for split in ("validation", "test"):
         for lead in leads:
