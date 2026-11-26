@@ -6,4 +6,5 @@ E2/cache/
 E2/prepared/
 E2/experiments/*/results/
 E2/experiments/*/checkpoints/
+E2/experiments/*/engineering_*/
 
