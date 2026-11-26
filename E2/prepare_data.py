@@ -11,8 +11,11 @@ from data import FrameCache, load_config, load_observations, solar_components
 
 
 def file_sha256(path):
+    digest = hashlib.sha256()
     with Path(path).open("rb") as stream:
-        return hashlib.file_digest(stream, "sha256").hexdigest()
+        while block := stream.read(2**20):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def save_array(folder, name, value):
