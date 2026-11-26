@@ -14,16 +14,20 @@ def plot_day(data, day, lead, output, title):
     frame = models["e2_a4"][index]
     fig, axis = plt.subplots(figsize=(11, 4.5))
     axis.plot(frame.index, frame[f"ghi_{lead}"], label="Observed GHI", color="black", linewidth=1.5)
-    axis.plot(frame.index, frame[f"prediction_{lead}"], label="E2 residual", linewidth=1.2)
+    axis.plot(frame.index, frame[f"prediction_{lead}"], label="E2 residual", linewidth=1.2,
+              color="tab:blue")
     axis.plot(frame.index, frame[f"clear_{lead}"], label="Clear-sky GHI", linewidth=1,
-              color="tab:orange", alpha=.8)
-    for name, label in (("e1_direct_a4", "E1 direct"), ("smart_persistence", "Smart persistence")):
+              color="0.45", linestyle="--", alpha=.9)
+    for name, label, color in (("e1_direct_a4", "E1 direct", "tab:orange"),
+                               ("smart_persistence", "Smart persistence", "tab:green")):
         if name not in models or models[name].empty:
             continue
         other = models[name].loc[frame.index]
-        axis.plot(frame.index, other[f"prediction_{lead}"], label=label, linewidth=1, alpha=.85)
+        axis.plot(frame.index, other[f"prediction_{lead}"], label=label, linewidth=1,
+                  color=color, alpha=.9)
     axis.set(title=title, ylabel="GHI (W/m²)", xlabel="Issue time (UTC)")
-    axis.legend(ncol=4)
+    axis.set_ylim(bottom=0)
+    axis.legend(ncol=3)
     fig.autofmt_xdate()
     fig.tight_layout()
     fig.savefig(output, dpi=160)
