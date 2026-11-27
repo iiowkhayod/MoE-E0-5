@@ -13,3 +13,5 @@ python E3/train_index.py --config E2/configs/base.json --conditions E2/configs/c
 ```
 
 Validation and test predictions contain issue timestamps, observations, reconstructed GHI, clear GHI and raw index predictions. Evaluation uses E2/evaluate.py on a separate directory containing copies of E1, E2 and E3 prediction files.
+
+Run the paired validation and test evaluator with `bash E3/evaluate_paired.sh` in the same Python environment. The evaluator reproduces E2's Smart Persistence, Ramp thresholds, event rules and metrics, and rejects mismatched issue timestamps.
