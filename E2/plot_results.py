@@ -12,6 +12,9 @@ def plot_day(data, day, lead, output, title):
               ("smart_persistence", "e1_direct_a4", "e2_a4")}
     index = models["e2_a4"].index.normalize() == day
     frame = models["e2_a4"][index]
+    # Insert missing issue minutes so matplotlib does not connect across night or outages.
+    full_index = pd.date_range(frame.index.min(), frame.index.max(), freq="min")
+    frame = frame.reindex(full_index)
     fig, axis = plt.subplots(figsize=(11, 4.5))
     axis.plot(frame.index, frame[f"ghi_{lead}"], label="Observed GHI", color="black", linewidth=1.5)
     axis.plot(frame.index, frame[f"prediction_{lead}"], label="E2 residual", linewidth=1.2,
@@ -22,7 +25,7 @@ def plot_day(data, day, lead, output, title):
                                ("smart_persistence", "Smart persistence", "tab:green")):
         if name not in models or models[name].empty:
             continue
-        other = models[name].loc[frame.index]
+        other = models[name].reindex(frame.index)
         axis.plot(frame.index, other[f"prediction_{lead}"], label=label, linewidth=1,
                   color=color, alpha=.9)
     axis.set(title=title, ylabel="GHI (W/m²)", xlabel="Issue time (UTC)")
